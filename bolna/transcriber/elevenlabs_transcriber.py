@@ -431,6 +431,9 @@ class ElevenLabsTranscriber(BaseTranscriber):
                         }
 
                         logger.info(f"Partial transcript: {transcript} (latency: {latency_ms}ms)")
+                        if not self.current_turn_interim_details and latency_ms is not None:
+                            # First result of the turn: expose the standard per-turn ASR latency (seconds).
+                            self.meta_info["transcriber_first_result_latency"] = latency_ms / 1000.0
                         self.current_turn_interim_details.append(interim_detail)
                         self.last_interim_time = time.time()
 

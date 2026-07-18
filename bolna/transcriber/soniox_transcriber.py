@@ -328,6 +328,9 @@ class SonioxTranscriber(BaseTranscriber):
                             if audio_sent_at:
                                 latency_ms = round(timestamp_ms() - audio_sent_at, 5)
                         self.last_interim_time = time.time()
+                        if not self.current_turn_interim_details and latency_ms is not None:
+                            # First result of the turn: expose the standard per-turn ASR latency (seconds).
+                            self.meta_info["transcriber_first_result_latency"] = latency_ms / 1000.0
                         self.current_turn_interim_details.append(
                             {
                                 "transcript": running,
