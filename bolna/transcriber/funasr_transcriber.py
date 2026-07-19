@@ -18,7 +18,12 @@ from websockets.asyncio.client import ClientConnection
 from websockets.exceptions import ConnectionClosedError, InvalidHandshake
 
 from .base_transcriber import BaseTranscriber
-from bolna.constants import FUNASR_DEFAULT_CHUNK_SIZE, FUNASR_DEFAULT_WS_URL, WEB_BASED_CALL_PROVIDER
+from bolna.constants import (
+    FUNASR_DEFAULT_CHUNK_SIZE,
+    FUNASR_DEFAULT_HTTP_URL,
+    FUNASR_DEFAULT_WS_URL,
+    WEB_BASED_CALL_PROVIDER,
+)
 from bolna.enums import TelephonyProvider
 from bolna.helpers.logger_config import configure_logger
 from bolna.helpers.ssl_context import get_ssl_context
@@ -82,7 +87,7 @@ class FunASRTranscriber(BaseTranscriber):
         self.http_base_url = (
             kwargs.get("http_base_url")
             or os.getenv("FUNASR_HTTP_URL")
-            or self._derive_http_base(self.ws_url)
+            or FUNASR_DEFAULT_HTTP_URL
         )
 
         self.audio_frame_duration = 0.2

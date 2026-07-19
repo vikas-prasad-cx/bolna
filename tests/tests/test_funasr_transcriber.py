@@ -68,6 +68,28 @@ def test_is_final_and_interim_modes():
     assert tr._is_interim_message({"is_final": False, "text": "h"})
 
 
+def test_non_stream_default_uses_funasr_server_http_port():
+    tr = FunASRTranscriber(
+        telephony_provider="web_based_call",
+        input_queue=asyncio.Queue(),
+        output_queue=asyncio.Queue(),
+        stream=False,
+    )
+    assert tr.ws_url == "ws://127.0.0.1:10095"
+    assert tr.http_base_url == "http://127.0.0.1:8000"
+
+
+def test_non_stream_http_base_url_can_be_overridden():
+    tr = FunASRTranscriber(
+        telephony_provider="web_based_call",
+        input_queue=asyncio.Queue(),
+        output_queue=asyncio.Queue(),
+        stream=False,
+        http_base_url="http://localhost:18000",
+    )
+    assert tr.http_base_url == "http://localhost:18000"
+
+
 @pytest.mark.asyncio
 async def test_receiver_emits_interim_then_final():
     tr = FunASRTranscriber(telephony_provider="web_based_call", input_queue=asyncio.Queue(), output_queue=asyncio.Queue())
